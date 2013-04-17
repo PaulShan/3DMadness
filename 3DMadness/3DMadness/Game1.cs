@@ -16,10 +16,15 @@ namespace _3DMadness
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        Camera camera;
+        private Camera camera;
+
+        private VertexPositionColor[] verts;
+        private VertexBuffer vertexBuffer;
+        private BasicEffect effect;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -37,8 +42,11 @@ namespace _3DMadness
             // TODO: Add your initialization logic here
             // Initialize camera
             camera = new Camera(this, new Vector3(0, 0, 5),
-            Vector3.Zero, Vector3.Up);
+                                Vector3.Zero, Vector3.Up);
             Components.Add(camera);
+
+
+
             base.Initialize();
         }
 
@@ -51,6 +59,18 @@ namespace _3DMadness
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            verts = new VertexPositionColor[3];
+            verts[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.Blue);
+            verts[1] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Red);
+            verts[2] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green);
+
+            // Set vertex data in VertexBuffer
+            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor),
+            verts.Length, BufferUsage.None);
+            vertexBuffer.SetData(verts);
+
+            // Initialize the BasicEffect
+            effect = new BasicEffect(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -88,6 +108,21 @@ namespace _3DMadness
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            GraphicsDevice.SetVertexBuffer(vertexBuffer);
+
+            //Set object and camera info
+            effect.World = Matrix.Identity;
+            effect.View = camera.view;
+            effect.Projection = camera.projection;
+            effect.VertexColorEnabled = true;
+            // Begin effect and draw for each pass
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                GraphicsDevice.DrawUserPrimitives<VertexPositionColor>
+                (PrimitiveType.TriangleStrip, verts, 0, 1);
+            }
+
 
             base.Draw(gameTime);
         }
