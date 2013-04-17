@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DMadness", "3DMadness\3DMadness\3DMadness.csproj", "{732A5A3B-0CDB-407A-9530-3F74A28B0B46}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "3DMadnessContent", "3DMadness\3DMadnessContent\3DMadnessContent.contentproj", "{452E7DDE-823F-4238-875E-8777E619FCF8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{732A5A3B-0CDB-407A-9530-3F74A28B0B46}.Debug|x86.ActiveCfg = Debug|x86
+		{732A5A3B-0CDB-407A-9530-3F74A28B0B46}.Debug|x86.Build.0 = Debug|x86
+		{732A5A3B-0CDB-407A-9530-3F74A28B0B46}.Release|x86.ActiveCfg = Release|x86
+		{732A5A3B-0CDB-407A-9530-3F74A28B0B46}.Release|x86.Build.0 = Release|x86
+		{452E7DDE-823F-4238-875E-8777E619FCF8}.Debug|x86.ActiveCfg = Debug|x86
+		{452E7DDE-823F-4238-875E-8777E619FCF8}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
