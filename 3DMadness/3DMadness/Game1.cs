@@ -24,6 +24,7 @@ namespace _3DMadness
         private VertexPositionColor[] verts;
         private VertexBuffer vertexBuffer;
         private BasicEffect effect;
+        private Matrix world = Matrix.Identity;
 
         public Game1()
         {
@@ -46,7 +47,6 @@ namespace _3DMadness
             Components.Add(camera);
 
 
-
             base.Initialize();
         }
 
@@ -65,8 +65,8 @@ namespace _3DMadness
             verts[2] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green);
 
             // Set vertex data in VertexBuffer
-            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor),
-            verts.Length, BufferUsage.None);
+            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof (VertexPositionColor),
+                                            verts.Length, BufferUsage.None);
             vertexBuffer.SetData(verts);
 
             // Initialize the BasicEffect
@@ -95,7 +95,12 @@ namespace _3DMadness
                 this.Exit();
 
             // TODO: Add your update logic here
-
+            // Translation
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Left))
+                world *= Matrix.CreateTranslation(-.01f, 0, 0);
+            if (keyboardState.IsKeyDown(Keys.Right))
+                world *= Matrix.CreateTranslation(.01f, 0, 0);
             base.Update(gameTime);
         }
 
@@ -111,16 +116,18 @@ namespace _3DMadness
             GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
             //Set object and camera info
-            effect.World = Matrix.Identity;
+            effect.World = world;
             effect.View = camera.view;
             effect.Projection = camera.projection;
             effect.VertexColorEnabled = true;
+
+
             // Begin effect and draw for each pass
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives<VertexPositionColor>
-                (PrimitiveType.TriangleStrip, verts, 0, 1);
+                    (PrimitiveType.TriangleStrip, verts, 0, 1);
             }
 
 
