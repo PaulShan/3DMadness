@@ -72,6 +72,11 @@ namespace _3DMadness
             // Initialize the BasicEffect
             effect = new BasicEffect(GraphicsDevice);
             // TODO: use this.Content to load your game content here
+
+            // Set cullmode to none
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            GraphicsDevice.RasterizerState = rs;
         }
 
         /// <summary>
@@ -101,6 +106,8 @@ namespace _3DMadness
                 world *= Matrix.CreateTranslation(-.01f, 0, 0);
             if (keyboardState.IsKeyDown(Keys.Right))
                 world *= Matrix.CreateTranslation(.01f, 0, 0);
+            // Rotation
+            world *= Matrix.CreateRotationY(MathHelper.PiOver4 / 60);
             base.Update(gameTime);
         }
 
