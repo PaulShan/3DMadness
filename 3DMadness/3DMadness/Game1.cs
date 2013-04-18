@@ -25,6 +25,8 @@ namespace _3DMadness
         private VertexBuffer vertexBuffer;
         private BasicEffect effect;
         private Matrix world = Matrix.Identity;
+        private Matrix worldTranslation = Matrix.Identity;
+        private Matrix worldRotation = Matrix.Identity;
 
         public Game1()
         {
@@ -100,14 +102,17 @@ namespace _3DMadness
                 this.Exit();
 
             // TODO: Add your update logic here
-            // Translation
+// Translation
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Left))
-                world *= Matrix.CreateTranslation(-.01f, 0, 0);
+                worldTranslation *= Matrix.CreateTranslation(-.01f, 0, 0);
             if (keyboardState.IsKeyDown(Keys.Right))
-                world *= Matrix.CreateTranslation(.01f, 0, 0);
+                worldTranslation *= Matrix.CreateTranslation(.01f, 0, 0);
+// Rotation
+            worldRotation *= Matrix.CreateRotationY(MathHelper.PiOver4/60);
             // Rotation
-            world *= Matrix.CreateRotationY(MathHelper.PiOver4 / 60);
+            effect.World = worldRotation * worldTranslation;
+
             base.Update(gameTime);
         }
 
@@ -123,7 +128,7 @@ namespace _3DMadness
             GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
             //Set object and camera info
-            effect.World = world;
+           // effect.World = world;
             effect.View = camera.view;
             effect.Projection = camera.projection;
             effect.VertexColorEnabled = true;
