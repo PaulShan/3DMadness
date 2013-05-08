@@ -61,10 +61,11 @@ namespace _3DMadness
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            verts = new VertexPositionColor[3];
-            verts[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.Blue);
-            verts[1] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Red);
+            verts = new VertexPositionColor[4];
+            verts[0] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Blue);
+            verts[1] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Yellow);
             verts[2] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green);
+            verts[3] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Red);
 
             // Set vertex data in VertexBuffer
             vertexBuffer = new VertexBuffer(GraphicsDevice, typeof (VertexPositionColor),
@@ -112,7 +113,7 @@ namespace _3DMadness
             worldRotation *= Matrix.CreateRotationY(MathHelper.PiOver4/60);
             // Rotation
             effect.World = worldRotation * worldTranslation;
-
+             //effect.World = Matrix.CreateScale(.5f) * worldRotation * worldTranslation;
             base.Update(gameTime);
         }
 
@@ -139,7 +140,7 @@ namespace _3DMadness
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserPrimitives<VertexPositionColor>
-                    (PrimitiveType.TriangleStrip, verts, 0, 1);
+                (PrimitiveType.TriangleStrip, verts, 0, 2);
             }
 
 
