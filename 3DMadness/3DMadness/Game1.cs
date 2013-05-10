@@ -21,13 +21,13 @@ namespace _3DMadness
 
         private Camera camera;
 
-        private VertexPositionColor[] verts;
+        private VertexPositionTexture[] verts;
         private VertexBuffer vertexBuffer;
         private BasicEffect effect;
         private Matrix world = Matrix.Identity;
         private Matrix worldTranslation = Matrix.Identity;
         private Matrix worldRotation = Matrix.Identity;
-
+        Texture2D texture;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -61,15 +61,19 @@ namespace _3DMadness
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            verts = new VertexPositionColor[4];
-            verts[0] = new VertexPositionColor(new Vector3(-1, 1, 0), Color.Blue);
-            verts[1] = new VertexPositionColor(new Vector3(1, 1, 0), Color.Yellow);
-            verts[2] = new VertexPositionColor(new Vector3(-1, -1, 0), Color.Green);
-            verts[3] = new VertexPositionColor(new Vector3(1, -1, 0), Color.Red);
+            verts = new VertexPositionTexture[4];
+            verts[0] = new VertexPositionTexture(
+                new Vector3(-1, 1, 0), new Vector2(0, 0));
+            verts[1] = new VertexPositionTexture(
+                new Vector3(1, 1, 0), new Vector2(1, 0));
+            verts[2] = new VertexPositionTexture(
+                new Vector3(-1, -1, 0), new Vector2(0, 1));
+            verts[3] = new VertexPositionTexture(
+                new Vector3(1, -1, 0), new Vector2(1, 1));
 
             // Set vertex data in VertexBuffer
-            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof (VertexPositionColor),
-                                            verts.Length, BufferUsage.None);
+            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionTexture),
+            verts.Length, BufferUsage.None);
             vertexBuffer.SetData(verts);
 
             // Initialize the BasicEffect
@@ -80,6 +84,8 @@ namespace _3DMadness
             RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
             GraphicsDevice.RasterizerState = rs;
+
+            texture = Content.Load<Texture2D>(@"Textures\trees");
         }
 
         /// <summary>
@@ -112,8 +118,8 @@ namespace _3DMadness
 // Rotation
             worldRotation *= Matrix.CreateRotationY(MathHelper.PiOver4/60);
             // Rotation
-            effect.World = worldRotation * worldTranslation;
-             //effect.World = Matrix.CreateScale(.5f) * worldRotation * worldTranslation;
+            effect.World = worldRotation*worldTranslation;
+            //effect.World = Matrix.CreateScale(.5f) * worldRotation * worldTranslation;
             base.Update(gameTime);
         }
 
@@ -129,17 +135,19 @@ namespace _3DMadness
             GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
             //Set object and camera info
-           // effect.World = world;
+            // effect.World = world;
             effect.View = camera.view;
             effect.Projection = camera.projection;
-            effect.VertexColorEnabled = true;
+
+            effect.Texture = texture;
+            effect.TextureEnabled = true;
 
 
             // Begin effect and draw for each pass
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                GraphicsDevice.DrawUserPrimitives<VertexPositionColor>
+                GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>
                 (PrimitiveType.TriangleStrip, verts, 0, 2);
             }
 
